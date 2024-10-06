@@ -1,0 +1,46 @@
+isValid(row, column, grid, n):
+    # revisar si ya existe el numero en su fila
+    for i = 0 until i < 9:
+        if grid[row][i] == n:
+            return false
+
+    # revisar si ya existe el numero en su columna
+    for i = 0 until i < 9:
+        if grid[i][column] == n:
+            return false
+
+    # obtener la primera fila y columna del cuadro del numero actual
+    startRow = row - row mod 3
+    starCol = column - column mod 3
+
+    # revisar si existe el numero en su cuadro
+    for i = 0 until i < 3:
+        for j = 0 until i < 3:
+            if grid[startRow + i][starCol + j] == n:
+                return false
+
+solveSudoku(row, column, grid):
+    # caso base sudoku resuelto
+    if column == 9 and row == 8:
+        return true
+
+    # revisar si la columna ya esta fuera de alcance para ir a la siguiente fila
+    if column == 9:
+        column = 0
+        row++
+
+    # revisar si ya existe un numero en la celda actual
+    if grid[row][column] != 0:
+        return solveSudoku(row, column + 1, grid)
+
+    # revisar numeros para el indice actual
+    for i = 1 until i < 10:
+        if isValid(row, column, grid, i):
+            grid[row][column] = i
+        
+            if solveSudoku(row, columm + 1, grid):
+                return true
+
+            # si no se encuentra la solucion regresar el valor a 0
+            grid[row][column] = 0
+
