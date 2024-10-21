@@ -137,6 +137,8 @@ vector<int> welsh_powell(vector<vector<int>>& G) {
         adjList.push_back(row);
     }
 
+    sort(degreeVertex.rbegin(), degreeVertex.rend());
+
     int currentColor = 0;
 
     for (pair<int, int>  vertexPair : degreeVertex) {
