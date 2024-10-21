@@ -48,9 +48,6 @@ int find(int i, int parent[])
     return i;
 }
  
-// Does union of i and j. It returns
-// false if i and j are already in same
-// set.
 void union1(int i, int j, int parent[])
 {
     int a = find(i, parent);
@@ -111,7 +108,7 @@ vector<vector<int>> createAdjacencyMatrix(vector<edge>& edges, int numNodes) {
     return adjMatrix;
 }
 
-// welsh-powell
+// welsh-powell https://www.tutorialspoint.com/welsh-powell-graph-colouring-algorithm
 vector<int> welsh_powell(vector<vector<int>>& G) {
     int numVertices = G.size();
     vector<int> colors(numVertices, -1);
@@ -137,7 +134,7 @@ vector<int> welsh_powell(vector<vector<int>>& G) {
         adjList.push_back(row);
     }
 
-    sort(degreeVertex.rbegin(), degreeVertex.rend());
+    sort(degreeVertex.begin(), degreeVertex.end());
 
     int currentColor = 0;
 
@@ -189,3 +186,5 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+
+// https://www.geeksforgeeks.org/kruskals-algorithm-simple-implementation-for-adjacency-matrix/
