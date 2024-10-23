@@ -41,6 +41,7 @@ vector<vector<int>> generateGraph(string filename) {
     return adjacencyMatrix;
 }
 
+// función para encontrar si dos nodos ya se encuentran en el mismo conjunto
 int find(int i, int parent[])
 {
     while (parent[i] != i)
@@ -48,6 +49,7 @@ int find(int i, int parent[])
     return i;
 }
  
+// unir dos conjuntos para que dos nodos estén en el mismo conjunto
 void union1(int i, int j, int parent[])
 {
     int a = find(i, parent);
@@ -96,7 +98,7 @@ vector<edge> kruskal(vector<vector<int>>& G) {
     return MST;
 }
 
-// funcion para hacer matriz de adyancencia con al lista de aristas que regresa kruskal
+// función para hacer matriz de adyancencia con al lista de aristas que regresa kruskal
 vector<vector<int>> createAdjacencyMatrix(vector<edge>& edges, int numNodes) {
     vector<vector<int>> adjMatrix(numNodes, vector<int>(numNodes, 0));
 
@@ -108,33 +110,40 @@ vector<vector<int>> createAdjacencyMatrix(vector<edge>& edges, int numNodes) {
     return adjMatrix;
 }
 
-// welsh-powell https://www.tutorialspoint.com/welsh-powell-graph-colouring-algorithm
+// welsh powell, regresa un vector con los colores de cada nodo
 vector<int> welsh_powell(vector<vector<int>>& G) {
     int numVertices = G.size();
     vector<int> colors(numVertices, -1);
 
     vector<pair<int, int>> degreeVertex;
-    vector<vector<int>> adjList;
+    vector<vector<int>> notNeighbors;
+    vector<vector<int>> neighbors;
 
     int currentDegree;
 
     for (int i = 0; i < G.size(); i++) {
 
         currentDegree = 0;
-        vector<int> row;
-        // conseguir grado de este nodo y agregar lo al vector de pares
+        vector<int> rowNotNeighbors;
+        vector<int> rowNeighbors;
+        // conseguir grado de este nodo y agregarlo al vector de pares
         for (int j = 0; j < G.size(); j++) {
             if (G[i][j] > 0) {
                 currentDegree++;
-                row.push_back(j);
+                rowNeighbors.push_back(j);
             }
+            else {
+                rowNotNeighbors.push_back(j);
+            }
+
         }
 
         degreeVertex.push_back({currentDegree, i});
-        adjList.push_back(row);
+        notNeighbors.push_back(rowNotNeighbors);
+        neighbors.push_back(rowNeighbors);
     }
 
-    sort(degreeVertex.begin(), degreeVertex.end());
+    sort(degreeVertex.rbegin(), degreeVertex.rend());
 
     int currentColor = 0;
 
@@ -147,9 +156,18 @@ vector<int> welsh_powell(vector<vector<int>>& G) {
 
         colors[vertex] = currentColor;
 
-        for (int neighbor : adjList[vertex]) {
-            if (colors[neighbor] == -1) {
-                colors[neighbor] = currentColor;
+        for (int notNeighbor : notNeighbors[vertex]) {
+
+            bool neighborFlag = true;
+            // revisar si algún nodo vecino del nodo notNeighbor esta pintado con el color actual
+            for (int neighbor : neighbors[notNeighbor]) {
+                if (colors[neighbor] == currentColor) {
+                    neighborFlag = false;
+                }
+            }
+
+            if (colors[notNeighbor] == -1 && neighborFlag) {
+                colors[notNeighbor] = currentColor;
             }
         }
 
@@ -163,14 +181,24 @@ vector<int> welsh_powell(vector<vector<int>>& G) {
 
 int main(int argc, char *argv[]) {
 
+    // generar matriz de adyacencia con el archivo de texto
     vector<vector<int>> G = generateGraph(argv[1]);
 
-    
-    vector<edge> MST = kruskal(G);
+    // Imprimir la matriz de adyacencia del grafo original
+    cout << "Grafo original:" << endl;
+    for (vector<int> row : G) {
+        for (int val : row) {
+            cout << val << " ";
+        }
+        cout << endl;
+    }
 
+    // crear el árbol recurridor mínimo
+    vector<edge> MST = kruskal(G);
     vector<vector<int>> MSTadjacencyMatrix = createAdjacencyMatrix(MST, G.size());
 
     // Imprimir la matriz de adyacencia del MST
+    cout << "\nMatriz de adyacnecia del arbol recurridor minimo:" << endl;
     for (vector<int> row : MSTadjacencyMatrix) {
         for (int val : row) {
             cout << val << " ";
@@ -178,13 +206,16 @@ int main(int argc, char *argv[]) {
         cout << endl;
     }
 
+    // se obtiene el arreglo de colores con welsh powell
     vector<int> colors = welsh_powell(G);
 
+    cout << "\nColo de cada nodo usando welsh powell:" << endl;
     for (int i = 0; i < colors.size(); i++) {
-        cout << "Vertex: " << i << " Color: " << colors[i] << endl;
+        cout << "Nodo: " << i << " Color: " << colors[i] << endl;
     }
 
     return 0;
 }
 
 // https://www.geeksforgeeks.org/kruskals-algorithm-simple-implementation-for-adjacency-matrix/
+// https://www.tutorialspoint.com/welsh-powell-graph-colouring-algorithm
