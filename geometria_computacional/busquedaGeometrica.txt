@@ -1,0 +1,23 @@
+puntos.ordenarPorX
+
+
+parDePuntosMasCercanosCrossing(puntos, l, r, minDistance):
+    for (i = m; i >= l; i--) {
+        min(puntos[i]) > minDistance:
+            minDistance
+    }
+
+parDePuntosMasCercanos(puntos, l, r):
+    if puntos.size == 1:
+        return
+    elif puntos.size == 2:
+        return euclideana(puntos[0], puntos[1])
+    elif puntos.size == 3:
+        return  min(euclideana(puntos[0], puntos[1]), euclideana(puntos[1], puntos[2]))
+
+    m = puntos.tamaño/2
+
+    return min(parDePuntosMasCercanos(puntos, l, m - 1), parDePuntosMasCercanos(puntos, m + 1, r),parDePuntosMasCercanosCrossing(puntos, l, m, h))
+
+
+

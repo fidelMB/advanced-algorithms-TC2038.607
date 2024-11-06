@@ -217,5 +217,6 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-// https://www.geeksforgeeks.org/kruskals-algorithm-simple-implementation-for-adjacency-matrix/
-// https://www.tutorialspoint.com/welsh-powell-graph-colouring-algorithm
+// GeeksforGeeks. (2023, 20 marzo). Kruskal’s Algorithm (Simple Implementation for Adjacency Matrix). GeeksforGeeks. https://www.geeksforgeeks.org/kruskals-algorithm-simple-implementation-for-adjacency-matrix/ 
+
+// Singh, A. (2023, 14 julio). Welsh Powell Graph Colouring Algorithm. https://www.tutorialspoint.com/welsh-powell-graph-colouring-algorithm
