@@ -22,6 +22,7 @@ struct point {
     }
 };
 
+// consigue el next to top del stack
 point next_to_top(stack<point> S) {
     point top = S.top();
     S.pop();
@@ -123,6 +124,7 @@ vector<point> readAndSortPoints(string filename) {
     return pointList;
 }
 
+// graham scan, regresa el stack con los puntos que forman el cierre convexo
 stack<point> grahamScan(string filename) {
     vector<point> points = readAndSortPoints(filename);
     stack<point> S;
@@ -136,9 +138,11 @@ stack<point> grahamScan(string filename) {
         S.push(points[2]);
 
         for (int i = 3; i < points.size(); i++) {
+            // mientras la direccion de rotacion que forma el angulo de los 3 puntos sea a la derecha se hace pop del stack
             while (getRotatingDirection(next_to_top(S), S.top(), points[i]) == "right") {
                 S.pop();
             }
+            // push del punto actual
             S.push(points[i]);
         }
 
@@ -149,11 +153,11 @@ stack<point> grahamScan(string filename) {
 
 int main(int argc, char *argv[]) {
 
+    //llamar graham scan
+    stack<point> pointStack = grahamScan(argv[1]);
 
-    stack<point> pointStack = grahamScan("puntos_aleatorios.txt");
-
-
-    ofstream outputFile("output.txt");
+    // escribir los puntos de la pila en un .txt
+    ofstream outputFile(argv[2]);
 
     point startPoint = pointStack.top();
 
@@ -165,4 +169,6 @@ int main(int argc, char *argv[]) {
     outputFile << startPoint.x << "," << startPoint.y;
 
     outputFile.close();
+    
+    return 0;
 }
