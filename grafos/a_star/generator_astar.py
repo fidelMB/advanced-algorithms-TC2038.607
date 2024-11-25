@@ -85,17 +85,18 @@ def plot_graph(G):
 
 # Example usage
 N, M = 100, 100     # Rectangle size
-num_nodes = 10      # Number of nodes
-edge_prob = 0.4     # Edge probability
+num_nodes = 25    # Number of nodes
+edge_prob = 0.1   # Edge probability
 
-filename = "graph1.txt"
+filename = "graph5.txt"
+filename2 = "coordinates5.txt"
 
 # Generate the graph
 G = generate_directed_graph(num_nodes, N, M, filename, edge_prob)
 
 # Save the graph to a text file
-# save_graph_to_file(G, filename)
-# print(f"Graph saved to {filename}")
+save_graph_to_file(G, filename2)
+#print(f"Graph saved to {filename}")
 
 # Plot the graph
-plot_graph(G)
+# plot_graph(G)
